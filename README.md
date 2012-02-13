@@ -1,18 +1,16 @@
-Spectator
-=========
+#Spectator
+#### A PlayBook WebWorks Application
 
 A beautiful and easy-to-use image gallery for showcasing your images on a BlackBerry Playbook!
 
-Built with [BlackBerry WebWorks for Tablet OS](https://bdsc.webapps.blackberry.com/html5/)
+Built with [BlackBerry WebWorks](https://bdsc.webapps.blackberry.com/html5/) for Tablet OS
 
-Features
---------
+### Features
 
 * [JQuery Masonry Plugin for Dynamic Photo layout](http://masonry.desandro.com)
 * [Twitter Bootsrap for CSS Framework](http://twitter.github.com/bootstrap)
 
-Todo
-----
+### Todo
 
 - Lazy Loading using Infinite Scroll by Paul Irish
 - JS to load images to JSON, then use factory to create DOM elements
