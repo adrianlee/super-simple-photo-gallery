@@ -1,8 +1,11 @@
 Spectator
 =========
 
+Hello!
+
 Features
 --------
+
 * [Dynamic Photo layout](http://masonry.desandro.com)
 * [Twitter Bootsrap for CSS Framework](http://twitter.github.com/bootstrap)
 

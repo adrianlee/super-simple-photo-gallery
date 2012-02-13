@@ -53,43 +53,18 @@ body {
   background: #222;
   padding-top: 40px;
   font-size: 0.8em;
-  font-family: Tahoma;
+  font-family: "Tahoma", serif;
 }
 
 .box {
   margin: 1px;
   padding: 1px;
   background: #333;
-  font-size: 11px;
-  line-height: 1.4em;
   float: left;
-  -webkit-border-radius: 1px;
-     -moz-border-radius: 1px;
-          border-radius: 1px;
 }
-
-.box h2 {
-  font-size: 14px;
-  font-weight: 200;
-}
-
-.box img,
-#tumblelog img {
-  display: block;
-  width: 100%;
-}
-
-.rtl .box {
-  float: right;
-  text-align: right; 
-  direction: rtl;
-}
-
 
 .col { width: 180px; }
 .col img { max-width: 180px; }
-
-
 
 .masonry,
 .masonry .masonry-brick {
