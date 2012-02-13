@@ -1,12 +1,14 @@
 Spectator
 =========
 
-Hello!
+A beautiful and easy-to-use image gallery for showcasing your images on a BlackBerry Playbook!
+
+Built with [BlackBerry WebWorks for Tablet OS](https://bdsc.webapps.blackberry.com/html5/)
 
 Features
 --------
 
-* [Dynamic Photo layout](http://masonry.desandro.com)
+* [JQuery Masonry Plugin for Dynamic Photo layout](http://masonry.desandro.com)
 * [Twitter Bootsrap for CSS Framework](http://twitter.github.com/bootstrap)
 
 Todo
