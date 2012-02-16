@@ -1,8 +1,9 @@
 var $container = $('#container');
+var numColumns = 4;
 
 function boxmaker (src) {
   return  '<div class="box col">' + 
-        '<img src="' + src + '"/>' +
+          '<img src="' + src + '"/>' +
           '</div>';
 }
 
@@ -18,7 +19,7 @@ $(function(){
   var $container = $('#container');
   
   $(window).resize(function() {
-    var w = $(window).width()/4-4;
+    var w = $(window).width()/numColumns-5;
     $('.col').css('width', w);
     $('div.col > img').css('width', w);
     $container.masonry( 'reload' );
@@ -53,9 +54,13 @@ $(function(){
   ];
 
   populate(list);
-  var w = $(window).width()/4-4;
+
+  var w = $(window).width()/numColumns-7;
   $('.col').css('width', w);
   $('div.col > img').css('width', w);
+  
+  // $('img.lazy').lazyload();
+  // $container.masonry( 'reload' );
 
   $container.imagesLoaded( function(){
     $container.masonry({
@@ -63,6 +68,5 @@ $(function(){
       itemSelector : '.box'
     });
     
-    //$container.masonry( 'reload' );
   });
 });
