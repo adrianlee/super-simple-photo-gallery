@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget xmlns="http://www.w3.org/ns/widgets"
         xmlns:rim="http://www.blackberry.com/ns/widgets"
-        version="1.0"
+        version="0.0.0.1"
         rim:header="RIM-Widget: rim/widget">
-	<author></author>
-	<name>Super Simple Photo Gallery</name>
+	<author>Adrian Lee, James Choi</author>
+	<name>Photo Gallery</name>
 	<description>
-		Photo Gallery
+		Photo Gallery.
 	</description>
 
 	<content src="index.html"></content>
