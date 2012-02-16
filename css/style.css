@@ -50,8 +50,8 @@ table {
 /* My CSS */
 
 body {
-  background: #222;
-  padding-top: 40px;
+  background: #444;
+  padding-top: 42px;
   font-size: 0.8em;
   font-family: "Tahoma", serif;
 }
@@ -63,8 +63,11 @@ body {
   float: left;
 }
 
-.col { width: 180px; }
-.col img { max-width: 180px; }
+
+.col { width: 0px; }
+/*
+.col img { max-width: 180px; max-height: auto;}
+*/
 
 .masonry,
 .masonry .masonry-brick {
