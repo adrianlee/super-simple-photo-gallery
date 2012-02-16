@@ -3,7 +3,7 @@ var numColumns = 4;
 
 function boxmaker (src) {
   return  '<div class="box col">' + 
-          '<img src="' + src + '"/>' +
+          '<img src="' + src + '" onclick="expand()"/>' +
           '</div>';
 }
 
@@ -15,15 +15,12 @@ function populate(list) {
 }
 
 
+function expand() {
+  console.log('asd');
+}
+
 $(function(){
   var $container = $('#container');
-  
-  $(window).resize(function() {
-    var w = $(window).width()/numColumns-5;
-    $('.col').css('width', w);
-    $('div.col > img').css('width', w);
-    $container.masonry( 'reload' );
-  });
 
   var list = [
     'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg',
@@ -67,6 +64,12 @@ $(function(){
       isAnimated: true,
       itemSelector : '.box'
     });
-    
   });
+});
+
+$(window).resize(function() {
+  var w = $(window).width()/numColumns-5;
+  $('.col').css('width', w);
+  $('div.col > img').css('width', w);
+  $container.masonry( 'reload' );
 });
