@@ -50,7 +50,8 @@ $(function(){
     'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg'
   ];
 
-  populate(list);
+  //console.log(imageDirList);
+  populate(typeof imageDirList != 'undefined' || imageDirList != null ? imageDirList : list);
 
   var w = $(window).width()/numColumns-7;
   $('.col').css('width', w);
