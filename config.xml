@@ -3,13 +3,15 @@
         xmlns:rim="http://www.blackberry.com/ns/widgets"
         version="0.0.1.1"
         rim:header="RIM-Widget: rim/widget">
-	<author>Adrian Lee, James Choi</author>
+	<author href="https://github.com/adrianlee">Adrian Lee, James Choi</author>
 	<name>Photo Gallery</name>
 	<description>
 		Photo Gallery.
 	</description>
 
-	<content src="index.html"></content>
+	<content src="index.html" />
+
+	<rim:category name="media" />
 
 	<feature id="blackberry.io.dir" />
 
