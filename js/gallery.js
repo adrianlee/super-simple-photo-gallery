@@ -50,6 +50,8 @@ $(function(){
     'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg'
   ];
 
+  getAllDirectories();
+
   //console.log(imageDirList);
   populate(typeof imageDirList != 'undefined' || imageDirList != null ? imageDirList : list);
 
