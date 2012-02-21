@@ -72,9 +72,10 @@ function checkImgDir(dir) {
 		added = false;
 		
 	for (ind = 0; ind < filesList.length; ind++) {
-		if (filesList[ind].indexOf(JPG_EXTENSION) != -1 || 
-				filesList[ind].indexOf(PNG_EXTENSION) != -1 ||
-					filesList[ind].indexOf(GIF_EXTENSION) != -1) {
+		var extension = filesList[ind].substring(filesList[ind].length - 4, filesList[ind].length);
+		if (extension.toLowerCase() === JPG_EXTENSION ||
+				extension.toLowerCase() === PNG_EXTENSION ||
+					extension.toLowerCase() === GIF_EXTENSION) {
 			if (!added) {
 				dirList.push(dir);
 				added = true;
