@@ -56,6 +56,10 @@ body {
   font-family: "Tahoma", serif;
 }
 
+#container {
+	margin: auto 10px;
+}
+
 .box {
   margin: 1px;
   padding: 1px;
@@ -69,6 +73,7 @@ body {
 .col img { max-width: 180px; max-height: auto;}
 */
 
+/*
 .masonry,
 .masonry .masonry-brick {
   -webkit-transition-duration: 0.7s;
@@ -90,3 +95,4 @@ body {
        -o-transition-property: left, right, top;
           transition-property: left, right, top;
 }
+*/

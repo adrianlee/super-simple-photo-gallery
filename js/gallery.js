@@ -19,9 +19,6 @@ $(function(){
   var $container = $('#container');
   
   $(window).resize(function() {
-    var w = $(window).width()/numColumns-5;
-    $('.col').css('width', w);
-    $('div.col > img').css('width', w);
     $container.masonry( 'reload' );
   });
 
@@ -55,17 +52,15 @@ $(function(){
 
   populate(list);
 
-  var w = $(window).width()/numColumns-7;
-  $('.col').css('width', w);
-  $('div.col > img').css('width', w);
-  
-  // $('img.lazy').lazyload();
-  // $container.masonry( 'reload' );
-
   $container.imagesLoaded( function(){
     $container.masonry({
-      isAnimated: true,
-      itemSelector : '.box'
+      isAnimated: false,
+      itemSelector : '.box',
+	  columnWidth: function( containerWidth ) {
+		$('.col').css('width', (containerWidth / 5)-4);
+		$('div.col > img').css('width', (containerWidth / 5)-4);
+		return containerWidth / 5;
+	  }
     });
     
   });
