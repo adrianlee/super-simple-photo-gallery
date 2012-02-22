@@ -10,6 +10,7 @@
 	</description>
 
 	<content src="index.html" />
+	<icon src="images/icon.png" />
 
 	<rim:category name="media" />
 
