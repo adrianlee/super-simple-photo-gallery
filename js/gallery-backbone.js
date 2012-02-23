@@ -32,106 +32,145 @@ $(function(){
 ///////////////////////////////////////////////////////////////
   var Photo = Backbone.Model.extend({
     defaults: {
-      src: 'placeholder.jpg',
-      title: 'an image placeholder',
+      src: 'http://placekitten.com/200/300',
       view: 0,
       fav: false
     },
 
-    initialize: function(){
-      this.bind("change:src", function(){
-        var src = this.get("src"); 
-        console.log('Image source updated to ' + src);
-      });
-    },
+   //  initialize: function(){
+    // console.log('this model has been initialized');
+   //    this.bind("change:src", function(){
+   //      var src = this.get("src"); 
+   //      console.log('Image source updated to ' + src);
+   //    });
+   //    this.bind("error", function(model, error){
+   //      console.log(error);
+   //    });
+   //  },
     
-    changeSrc: function( source ){
-      this.set({ src: source });
-    },
-    
-    initialize: function(){
-      console.log('this model has been initialized');
-      this.bind("error", function(model, error){
-        console.log(error);
-      });
-    },
+   //  changeSrc: function( source ){
+   //    this.set({ src: source });
+   //  },
 
-    addView: function() {
-      var i = this.get('view') + 1;
-      this.set({ view: i });
-    },
+   //  incView: function() {
+   //    var i = this.get('view') + 1;
+   //    this.set({ view: i });
+   //  },
 
-    toggleFav: function() {
-      var o = !this.get('fav');
-      this.set({ view: i });
-    }
+   //  toggleFav: function() {
+   //    var o = !this.get('fav');
+   //    this.set({ view: i });
+   //  }
   });
 
 ///////////////////////////////////////////////////////////////
 //  Collection
 ///////////////////////////////////////////////////////////////
   var PhotoCollection = Backbone.Collection.extend({
-      model: Photo,
-
-      localStorage: new Store("photos")
+    model: Photo,
+    localStorage: new Store("photos")
   });
+  
+  var Photos = new PhotoCollection;
 
 ///////////////////////////////////////////////////////////////
-//  View
+//  Photo View
 ///////////////////////////////////////////////////////////////
   var PhotoView = Backbone.View.extend({
-    el: $('#container'),
-    // Events
-    events: { 
-      'click a.view':  'view',
-      'click a.fav': 'fav'
-    },    
-    // Listens for changes to its model, re-rendering.
-    initialize: function () {
-      _.bindAll(this, 'render', 'appendItem', 'view', 'fav');
+    tagName:  "li",
+
+    // className: "box",
     
-      this.collection = new PhotoCollection(list);
-      
-      this.collection.bind('add', this.appendItem);
-
-      this.render();
-    },
-
-    // Re-render the contents
-    render: function () {
-      var self = this;
-      // $(this.el).append("<button id='add'>Add list item</button>");
-        $(this.el).append("<ul></ul>");
-      
-      // Display what's in our collection
-      _(this.collection.models).each(function(item){
-        self.appendItem(item);
-      }, this);
+    template: _.template($('#photo-template').html()),
+    
+    events: {
+      "click a" : "open"
     },
     
-    appendItem: function(item){
-      $('ul', this.el).append("<li class='box col' style='height: auto'>"+"<a class='view' href='#'><img src='"+item.get('src')+"' /></li></a>");
+    initialize: function() {
+      this.model.bind('change', this.render, this);
+      //this.model.bind('destroy', this.remove, this);
+    },
+    
+    render: function() {
+      $(this.el).html(this.template(this.model.toJSON()));
+      this.setText();
+      return this;
     },
 
-    view: function() {
-      var i = this.model.get('view') + 1;
-      this.model.set({ view: i });
+    setText: function() {
+      console.log('set text');
     },
-
-    fav: function() {
-      //this.model.toggleFav();
+    
+    remove: function() {
+      console.log('remove');
+    },
+    
+    open: function() {
+      console.log('Hello World');
     }
   });
+  
+///////////////////////////////////////////////////////////////
+//  App View
+///////////////////////////////////////////////////////////////
+  var AppView = Backbone.View.extend({
+    el: $("#container"),
 
+    // statsTemplate: _.template($('#stats-template').html()),
+
+    events: {
+    
+    },
+    
+    initialize: function() {
+      //this.input = this.$("#new-todo");
+
+      Photos.bind('add',   this.addOne, this);
+      Photos.bind('reset', this.addAll, this);
+      Photos.bind('all',   this.render, this);
+
+      Photos.fetch();
+    },
+
+    render: function() {
+      // this.$('#stats').html(this.statsTemplate({
+      //   collection: Photos.length,
+      //   storage: localStorage.length
+      // }));
+    },
+
+    addOne: function(photo) {
+      console.log('addOne: ' + JSON.stringify(photo));
+      //Photos.add(todo);
+      var view = new PhotoView({model: photo});
+      $("#photo-list").append(view.render().el);
+    },
+
+    addAll: function() {
+      // Photos.each(this.addOne);
+    }
+  });
 ///////////////////////////////////////////////////////////////
 //  Init
 ///////////////////////////////////////////////////////////////
-  //var photoCollection = new PhotoCollection();  
-  var photoView = new PhotoView();
+  //Photos.add(list);
+  _.each(list, function(x) {
+    //
+    // If Photo found already, dont create!
+    //
+    //Photos.create(x);
+  });
+
+  var App = new AppView;
+
+  console.log('Photos.length ' + Photos.length);
+  console.log('localStorage.length ' + localStorage.length);
 
 ///////////////////////////////////////////////////////////////
 //  Masonry
 ///////////////////////////////////////////////////////////////
+
   var $container = $('#container');
 
   $(".box").hide();
@@ -144,6 +183,7 @@ $(function(){
     $(this).parent().parent().fadeIn();
     $(this).fadeIn(); 
   });
+  
 
   $container.masonry({
     isAnimated: false,
@@ -154,22 +194,6 @@ $(function(){
       return containerWidth / 5;
     }
   });
-
-  $container.masonry( 'reload' );
-
-  // var max_size = 200;
-  // $("img").each(function(i) {
-  //   if ($(this).height() > $(this).width()) {
-  //     var h = max_size;
-  //     var w = Math.ceil($(this).width() / $(this).height() * max_size);
-  //   } else {
-  //     var w = max_size;
-  //     var h = Math.ceil($(this).height() / $(this).width() * max_size);
-  //   }
-  //   $(this).css({ height: h, width: w });
-  // });
-
-
   $container.imagesLoaded( function(){
     $container.masonry({
       isAnimated: false,
@@ -181,4 +205,5 @@ $(function(){
       }
     });
   });
+
 });

@@ -43,15 +43,16 @@
   </div>
 
   <!-- Stage -->
+  <div id="stats" class="clearfix"></div>
   <div id="container" class="clearfix">
-    
+    <ul id="photo-list"></ul>
   </div>
 
   <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="js/jquery.masonry.min.js"></script>
   <script type="text/javascript" src="js/underscore-min.js"></script>
   <script type="text/javascript" src="js/backbone-min.js"></script>
-  <script type="text/javascript" src="js/backbone.localStorage-min.js"></script>
+  <script type="text/javascript" src="js/backbone-localStorage.js"></script>
   
   
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
@@ -59,5 +60,18 @@
 
   <!-- <script type="text/javascript" src="js/gallery.js"></script> -->
   <script type="text/javascript" src="js/gallery-backbone.js"></script>
+
+  <script type="text/template" id="photo-template">
+    <div class="box col">
+      <a class="open" href="#">
+        <img src="<%= src %>"/>
+      </a>
+    </div>
+  </script>
+
+  <script type="text/template" id="stats-template">
+    <span class="collection"><%= collection %></span>
+    <span class="storage"><%= storage %></span>
+  </script>
 </body>
 </html>

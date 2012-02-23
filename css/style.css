@@ -68,9 +68,9 @@ body {
 }
 
 
+.col { width: 180px; }
 /*
-.col { width: 100%; }
-.col img { width: 100%; }
+.col img { max-width: 180px; max-height: auto;}
 */
 
 /*
