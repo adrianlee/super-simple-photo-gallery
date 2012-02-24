@@ -24,8 +24,8 @@
         <div class="nav-collapse">
           <ul class="nav">
             <li><a href="#">Recent</a></li>
-            <li><a href="#">Most Viewed</a></li>
-            <li><a href="#">Favourite</a></li>
+            <li><a href="#most">Most Viewed</a></li>
+            <li><a href="#fav">Favourite</a></li>
           </ul>
           <ul class="nav pull-right">
             <li class="divider-vertical"></li>
@@ -51,19 +51,16 @@
   <script type="text/javascript" src="js/backbone-min.js"></script>
   <script type="text/javascript" src="js/backbone-localStorage.js"></script>
   
-  
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/retrieve_images.js">.js></script>
+  <script type="text/javascript" src="js/retrieve_images.js"></script>
 
   <!-- <script type="text/javascript" src="js/gallery.js"></script> -->
   <script type="text/javascript" src="js/gallery-backbone.js"></script>
 
   <script type="text/template" id="photo-template">
-    <div class="box col">
-      <a class="open" href="#">
-        <img src="<%= src %>"/>
+      <a class="open">
+        <img src="<%= src %>" />
       </a>
-    </div>
   </script>
 
   <script type="text/template" id="stats-template">

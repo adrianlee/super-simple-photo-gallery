@@ -6,6 +6,20 @@ var Photo = Backbone.Model.extend({
     src: 'http://placekitten.com/200/300',
     view: 0,
     fav: false
+  },
+
+  toggleFav: function() {
+    var toggle = !this.get('fav');
+    this.set('fav', toggle);
+    console.log(this.get('fav'));
+    this.save();
+  },
+
+  incrView: function() {
+    var i = this.get('view') + 1;
+    this.set('view', i);
+    console.log(this.get('view'));
+    this.save();
   }
 });
 
@@ -26,20 +40,31 @@ var gallery = new PhotoGallery();
 var PhotoItemView = Backbone.View.extend({
   tagName: "li",
 
+  className: "box col",
+
   initialize: function () {
-    this.template = $('#photo-template');
+    this.template = _.template($('#photo-template').html());
     _.bindAll(this, "render");
     // this.model.bind("change:fav", this.toggleFav);
   },
 
   events: {
-    // "click a" : "open"
+    "click a" : "open",
+    "dblclick a" : "fav" 
   },
 
   render: function() {
-    var content = this.template.tmpl(this.model.toJSON());
+    var content = this.template(this.model.toJSON());
     $(this.el).html(content);
     return this;
+  },
+
+  open: function() {
+    this.model.incrView();
+  },
+
+  fav: function() {
+    this.model.toggleFav();
   }
 });
 
@@ -47,12 +72,11 @@ var PhotoItemView = Backbone.View.extend({
 //  Photo List View
 ///////////////////////////////////////////////////////////////
 var PhotoListView = Backbone.View.extend({
-  el: $('#container'),
-
   initialize: function() {
     _.bindAll(this, "render");
     this.collection.bind("add", this.render);
     this.collection.bind("remove", this.render);
+    gallery.fetch();
   },
   
   render: function() {
@@ -66,24 +90,108 @@ var PhotoListView = Backbone.View.extend({
     });
 
     $(this.el).append(els);
+    console.log(els);
     return this;
   }
 });
+
+///////////////////////////////////////////////////////////////
+//  Photo Most Viewed List View
+///////////////////////////////////////////////////////////////
+var MostViewedView = Backbone.View.extend({
+  initialize: function() {
+    _.bindAll(this, "render");
+    this.collection.bind("add", this.render);
+    this.collection.bind("remove", this.render);
+    gallery.fetch();
+  },
+  
+  render: function() {
+    $(this.el).empty(); // Clear existing list in el.
+
+    var els = [];
+
+    var sortedList = this.collection.sortBy(function(model) {
+      return model.get('view');
+    });
+
+    _.each(sortedList.reverse(), function(model) {
+      var view = new PhotoItemView({model: model});
+      els.push(view.render().el);
+    });
+
+    $(this.el).append(els);
+    console.log(els);
+    return this;
+  }
+});
+
+///////////////////////////////////////////////////////////////
+//  Photo Favourite List View
+///////////////////////////////////////////////////////////////
+var FavouriteView = Backbone.View.extend({
+  initialize: function() {
+    _.bindAll(this, "render");
+    this.collection.bind("add", this.render);
+    this.collection.bind("remove", this.render);
+    gallery.fetch();
+  },
+  
+  render: function() {
+    $(this.el).empty(); // Clear existing list in el.
+
+    var els = [];
+
+    var favList = this.collection.filter(function(model) {
+      return model.get('fav');
+    });
+
+    console.log(favList);
+
+    _.each(favList, function(model) {
+      var view = new PhotoItemView({model: model});
+      els.push(view.render().el);
+    });
+
+    $(this.el).append(els);
+    console.log(els);
+    return this;
+  }
+});
+
 
 ///////////////////////////////////////////////////////////////
 //  Router
 ///////////////////////////////////////////////////////////////
 var PhotoList = Backbone.Router.extend({
   initialize : function(){
-    photoListView = new PhotoListView({collection: gallery});
+    photoListView = new PhotoListView({collection: gallery, el: '#container'});
+    mostViewedView = new MostViewedView({collection: gallery, el: '#container'});
+    favouriteView = new FavouriteView({collection: gallery, el: '#container'});
   },
 
   routes : {
-    "" : "index"
+    "" : "index",
+    "most" : "mostViewed",
+    "fav" : "favouriteView"
   },
 
   index : function(){
+    console.log('index');
     photoListView.render();
+    $('#container').masonry('reload');
+  },
+
+  mostViewed: function() {
+    console.log('mostViewed');
+    mostViewedView.render();
+    $('#container').masonry('reload');
+  },
+
+  favouriteView: function() {
+    console.log('favouriteView');
+    favouriteView.render();
+    $('#container').masonry('reload');
   }
 });
 
@@ -121,17 +229,23 @@ var list = [
 
 $(function(){
   var app = new PhotoList;
+  Backbone.history.start();
+  //gallery.add(list);
 
+  // _.each(list, function(x) {
+  //   gallery.create(x);
+  // });
   console.log('gallery.length ' + gallery.length);
   console.log('localStorage.length ' + localStorage.length);
 
 ///////////////////////////////////////////////////////////////
 //  Masonry
 ///////////////////////////////////////////////////////////////
-/*
+
   var $container = $('#container');
 
   $(".box").hide();
+
   $(".box > a > img").hide()
   .one("ready", function() {
     console.log($(this).height());
@@ -152,6 +266,7 @@ $(function(){
       return containerWidth / 5;
     }
   });
+
   $container.imagesLoaded( function(){
     $container.masonry({
       isAnimated: false,
@@ -163,5 +278,5 @@ $(function(){
       }
     });
   });
-*/
+
 });
