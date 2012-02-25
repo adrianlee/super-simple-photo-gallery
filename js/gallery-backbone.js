@@ -37,6 +37,8 @@ var gallery = new PhotoGallery();
 ///////////////////////////////////////////////////////////////
 //  Photo Item View
 ///////////////////////////////////////////////////////////////
+var tempPhotoItem;
+
 var PhotoItemView = Backbone.View.extend({
   tagName: "div",
 
@@ -60,7 +62,11 @@ var PhotoItemView = Backbone.View.extend({
   },
 
   open: function() {
-    console.log($(this.el).removeClass('col').addClass('col2'));
+    if (tempPhotoItem) {
+      tempPhotoItem.removeClass('col2').addClass('col');
+    }
+    tempPhotoItem = $(this.el);
+    $(this.el).removeClass('col').addClass('col2');
     $('#container').masonry('reload');
     this.model.incrView();
   },
@@ -278,11 +284,11 @@ $(function(){
   
 
   $container.masonry({
-    isAnimated: true,
+    isAnimated: false,
     itemSelector : '.box',
     columnWidth: function( containerWidth ) {
       $('.col').css('width', (containerWidth / 5)-4);
-      $('div.col > img').css('width', (containerWidth / 5)-4);
+      $('div.col > a > img').css('width', (containerWidth / 5)-4);
       $('.col2').css('width', (containerWidth / 5)*2-4);
       $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
       return containerWidth / 5;
@@ -291,11 +297,11 @@ $(function(){
 
   $container.imagesLoaded( function(){
     $container.masonry({
-      isAnimated: true,
+      isAnimated: false,
       itemSelector : '.box',
       columnWidth: function( containerWidth ) {
         $('.col').css('width', (containerWidth / 5)-4);
-        $('div.col > img').css('width', (containerWidth / 5)-4);
+        $('div.col > a > img').css('width', (containerWidth / 5)-4);
         $('.col2').css('width', (containerWidth / 5)*2-4);
         $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
         return containerWidth / 5;
