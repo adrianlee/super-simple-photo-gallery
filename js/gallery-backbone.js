@@ -38,7 +38,7 @@ var gallery = new PhotoGallery();
 //  Photo Item View
 ///////////////////////////////////////////////////////////////
 var PhotoItemView = Backbone.View.extend({
-  tagName: "li",
+  tagName: "div",
 
   className: "box col",
 
@@ -60,6 +60,8 @@ var PhotoItemView = Backbone.View.extend({
   },
 
   open: function() {
+    console.log($(this.el).removeClass('col').addClass('col2'));
+    $('#container').masonry('reload');
     this.model.incrView();
   },
 
@@ -72,11 +74,12 @@ var PhotoItemView = Backbone.View.extend({
 //  Photo List View
 ///////////////////////////////////////////////////////////////
 var PhotoListView = Backbone.View.extend({
+  el: '#container',
+
   initialize: function() {
     _.bindAll(this, "render");
     this.collection.bind("add", this.render);
     this.collection.bind("remove", this.render);
-    gallery.fetch();
   },
   
   render: function() {
@@ -90,7 +93,7 @@ var PhotoListView = Backbone.View.extend({
     });
 
     $(this.el).append(els);
-    console.log(els);
+    //console.log(els);
     return this;
   }
 });
@@ -99,11 +102,12 @@ var PhotoListView = Backbone.View.extend({
 //  Photo Most Viewed List View
 ///////////////////////////////////////////////////////////////
 var MostViewedView = Backbone.View.extend({
+  el: '#container',
+
   initialize: function() {
     _.bindAll(this, "render");
     this.collection.bind("add", this.render);
     this.collection.bind("remove", this.render);
-    gallery.fetch();
   },
   
   render: function() {
@@ -121,7 +125,7 @@ var MostViewedView = Backbone.View.extend({
     });
 
     $(this.el).append(els);
-    console.log(els);
+    //console.log(els);
     return this;
   }
 });
@@ -130,11 +134,16 @@ var MostViewedView = Backbone.View.extend({
 //  Photo Favourite List View
 ///////////////////////////////////////////////////////////////
 var FavouriteView = Backbone.View.extend({
+  el: '#container',
+
+  events: {
+    "click a": "say"
+  },
+
   initialize: function() {
     _.bindAll(this, "render");
     this.collection.bind("add", this.render);
     this.collection.bind("remove", this.render);
-    gallery.fetch();
   },
   
   render: function() {
@@ -146,16 +155,18 @@ var FavouriteView = Backbone.View.extend({
       return model.get('fav');
     });
 
-    console.log(favList);
-
     _.each(favList, function(model) {
       var view = new PhotoItemView({model: model});
       els.push(view.render().el);
     });
 
     $(this.el).append(els);
-    console.log(els);
+    //console.log(els);
     return this;
+  },
+
+  say: function(e) {
+    console.log(e);
   }
 });
 
@@ -165,9 +176,23 @@ var FavouriteView = Backbone.View.extend({
 ///////////////////////////////////////////////////////////////
 var PhotoList = Backbone.Router.extend({
   initialize : function(){
-    photoListView = new PhotoListView({collection: gallery, el: '#container'});
-    mostViewedView = new MostViewedView({collection: gallery, el: '#container'});
-    favouriteView = new FavouriteView({collection: gallery, el: '#container'});
+    gallery.fetch();
+
+    _.each(list, function(x) {
+      var exist = gallery.any(function (model) {
+        return model.get('src') == x.src;
+      });
+
+      if (!exist) {
+        console.log('Adding to collection: ' + x.src);
+        gallery.create(x);
+      }
+    });
+
+    photoListView = new PhotoListView({collection: gallery});
+    mostViewedView = new MostViewedView({collection: gallery});
+    favouriteView = new FavouriteView({collection: gallery});
+
   },
 
   routes : {
@@ -177,19 +202,19 @@ var PhotoList = Backbone.Router.extend({
   },
 
   index : function(){
-    console.log('index');
+    console.log('View: Index');
     photoListView.render();
     $('#container').masonry('reload');
   },
 
   mostViewed: function() {
-    console.log('mostViewed');
+    console.log('View: Most Viewed');
     mostViewedView.render();
     $('#container').masonry('reload');
   },
 
   favouriteView: function() {
-    console.log('favouriteView');
+    console.log('View: Favourite');
     favouriteView.render();
     $('#container').masonry('reload');
   }
@@ -230,11 +255,6 @@ var list = [
 $(function(){
   var app = new PhotoList;
   Backbone.history.start();
-  //gallery.add(list);
-
-  // _.each(list, function(x) {
-  //   gallery.create(x);
-  // });
   console.log('gallery.length ' + gallery.length);
   console.log('localStorage.length ' + localStorage.length);
 
@@ -258,22 +278,26 @@ $(function(){
   
 
   $container.masonry({
-    isAnimated: false,
+    isAnimated: true,
     itemSelector : '.box',
     columnWidth: function( containerWidth ) {
       $('.col').css('width', (containerWidth / 5)-4);
       $('div.col > img').css('width', (containerWidth / 5)-4);
+      $('.col2').css('width', (containerWidth / 5)*2-4);
+      $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
       return containerWidth / 5;
     }
   });
 
   $container.imagesLoaded( function(){
     $container.masonry({
-      isAnimated: false,
+      isAnimated: true,
       itemSelector : '.box',
       columnWidth: function( containerWidth ) {
         $('.col').css('width', (containerWidth / 5)-4);
         $('div.col > img').css('width', (containerWidth / 5)-4);
+        $('.col2').css('width', (containerWidth / 5)*2-4);
+        $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
         return containerWidth / 5;
       }
     });
