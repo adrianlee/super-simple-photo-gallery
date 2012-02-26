@@ -13,6 +13,7 @@ var Photo = Backbone.Model.extend({
     this.set('fav', toggle);
     console.log(this.get('fav'));
     this.save();
+    return this.get('fav');
   },
 
   incrView: function() {
@@ -52,7 +53,7 @@ var PhotoItemView = Backbone.View.extend({
 
   events: {
     "click a" : "open",
-    "dblclick a" : "fav" 
+    "click a.fav" : "fav" 
   },
 
   render: function() {
@@ -72,7 +73,13 @@ var PhotoItemView = Backbone.View.extend({
   },
 
   fav: function() {
-    this.model.toggleFav();
+    if (!this.model.toggleFav()) {
+      // hide item
+    }
+  },
+
+  setFavIcon: function() {
+    
   }
 });
 
@@ -143,7 +150,7 @@ var FavouriteView = Backbone.View.extend({
   el: '#container',
 
   events: {
-    "click a": "say"
+    // "click a": "say"
   },
 
   initialize: function() {
@@ -169,10 +176,6 @@ var FavouriteView = Backbone.View.extend({
     $(this.el).append(els);
     //console.log(els);
     return this;
-  },
-
-  say: function(e) {
-    console.log(e);
   }
 });
 

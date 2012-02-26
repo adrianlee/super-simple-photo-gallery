@@ -59,9 +59,11 @@
   <script type="text/javascript" src="js/gallery-backbone.js"></script>
 
   <script type="text/template" id="photo-template">
-      <a class="open <%= id %>">
-        <img src="<%= src %>" />
-      </a>
+      <a class="open <%= id %>"><img src="<%= src %>"/></a>
+      <div class="imgmenu">
+        <a class="fav"><i class="icon-star-empty icon-white"></i></a>
+        <a class="fav"><i class="icon-trash icon-white"></i></a>
+      </div>
   </script>
 
   <script type="text/template" id="stats-template">
