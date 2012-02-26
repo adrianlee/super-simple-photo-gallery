@@ -1,170 +1,270 @@
-$(function(){
-  var list = [
-    { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
-    { src: 'http://farm5.static.flickr.com/4131/5013039885_0d16ac87bc.jpg' },
-    { src: 'http://farm5.static.flickr.com/4086/5013039583_26717f6e89.jpg' },
-    { src: 'http://farm5.static.flickr.com/4146/5013646070_f1f44b1939.jpg' },
-    { src: 'http://farm5.static.flickr.com/4144/5013039541_17f2579e33.jpg' },
-    { src: 'http://farm5.static.flickr.com/4153/5013039741_d860fb640b.jpg' },
-    { src: 'http://farm5.static.flickr.com/4113/5013039697_a15e41fcd8.jpg' },
-    { src: 'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg' },
-    { src: 'http://farm5.static.flickr.com/4089/5013040075_bac12ff74e.jpg' },
-    { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
-    { src: 'http://farm5.static.flickr.com/4131/5013039885_0d16ac87bc.jpg' },
-    { src: 'http://farm5.static.flickr.com/4086/5013039583_26717f6e89.jpg' },
-    { src: 'http://farm5.static.flickr.com/4146/5013646070_f1f44b1939.jpg' },
-    { src: 'http://farm5.static.flickr.com/4144/5013039541_17f2579e33.jpg' },
-    { src: 'http://farm5.static.flickr.com/4153/5013039741_d860fb640b.jpg' },
-    { src: 'http://farm5.static.flickr.com/4113/5013039697_a15e41fcd8.jpg' },
-    { src: 'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg' },
-    { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
-    { src: 'http://farm5.static.flickr.com/4131/5013039885_0d16ac87bc.jpg' },
-    { src: 'http://farm5.static.flickr.com/4086/5013039583_26717f6e89.jpg' },
-    { src: 'http://farm5.static.flickr.com/4146/5013646070_f1f44b1939.jpg' },
-    { src: 'http://farm5.static.flickr.com/4144/5013039541_17f2579e33.jpg' },
-    { src: 'http://farm5.static.flickr.com/4153/5013039741_d860fb640b.jpg' },
-    { src: 'http://farm5.static.flickr.com/4113/5013039697_a15e41fcd8.jpg' },
-    { src: 'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg' }
-  ];
-
 ///////////////////////////////////////////////////////////////
 //  Model
 ///////////////////////////////////////////////////////////////
-  var Photo = Backbone.Model.extend({
-    defaults: {
-      src: 'http://placekitten.com/200/300',
-      view: 0,
-      fav: false
-    },
+var Photo = Backbone.Model.extend({
+  defaults: {
+    src: 'http://placekitten.com/200/300',
+    view: 0,
+    fav: false
+  },
 
-   //  initialize: function(){
-    // console.log('this model has been initialized');
-   //    this.bind("change:src", function(){
-   //      var src = this.get("src"); 
-   //      console.log('Image source updated to ' + src);
-   //    });
-   //    this.bind("error", function(model, error){
-   //      console.log(error);
-   //    });
-   //  },
-    
-   //  changeSrc: function( source ){
-   //    this.set({ src: source });
-   //  },
+  toggleFav: function() {
+    var toggle = !this.get('fav');
+    this.set('fav', toggle);
+    console.log(this.get('fav'));
+    this.save();
+    return this.get('fav');
+  },
 
-   //  incView: function() {
-   //    var i = this.get('view') + 1;
-   //    this.set({ view: i });
-   //  },
-
-   //  toggleFav: function() {
-   //    var o = !this.get('fav');
-   //    this.set({ view: i });
-   //  }
-  });
+  incrView: function() {
+    var i = this.get('view') + 1;
+    this.set('view', i);
+    console.log(this.get('view'));
+    this.save();
+  }
+});
 
 ///////////////////////////////////////////////////////////////
 //  Collection
 ///////////////////////////////////////////////////////////////
-  var PhotoCollection = Backbone.Collection.extend({
-    model: Photo,
-    localStorage: new Store("photos")
-  });
-  
-  var Photos = new PhotoCollection;
+var PhotoGallery = Backbone.Collection.extend({
+  model: Photo,
+  localStorage: new Store("photos")
+});
+
+var gallery = new PhotoGallery();
+
 
 ///////////////////////////////////////////////////////////////
-//  Photo View
+//  Photo Item View
 ///////////////////////////////////////////////////////////////
-  var PhotoView = Backbone.View.extend({
-    tagName:  "li",
+var tempPhotoItem;
 
-    // className: "box",
-    
-    template: _.template($('#photo-template').html()),
-    
-    events: {
-      "click a" : "open"
-    },
-    
-    initialize: function() {
-      this.model.bind('change', this.render, this);
-      //this.model.bind('destroy', this.remove, this);
-    },
-    
-    render: function() {
-      $(this.el).html(this.template(this.model.toJSON()));
-      this.setText();
-      return this;
-    },
+var PhotoItemView = Backbone.View.extend({
+  tagName: "div",
 
-    setText: function() {
-      console.log('set text');
-    },
-    
-    remove: function() {
-      console.log('remove');
-    },
-    
-    open: function() {
-      console.log('Hello World');
+  className: "box col",
+
+  initialize: function () {
+    this.template = _.template($('#photo-template').html());
+    _.bindAll(this, "render");
+    // this.model.bind("change:fav", this.toggleFav);
+  },
+
+  events: {
+    "click a" : "open",
+    "click a.fav" : "fav" 
+  },
+
+  render: function() {
+    var content = this.template(this.model.toJSON());
+    $(this.el).html(content);
+    return this;
+  },
+
+  open: function() {
+    if (tempPhotoItem) {
+      tempPhotoItem.removeClass('col2').addClass('col');
     }
-  });
-  
-///////////////////////////////////////////////////////////////
-//  App View
-///////////////////////////////////////////////////////////////
-  var AppView = Backbone.View.extend({
-    el: $("#container"),
+    tempPhotoItem = $(this.el);
+    $(this.el).removeClass('col').addClass('col2');
+    $('#container').masonry('reload');
+    this.model.incrView();
+  },
 
-    // statsTemplate: _.template($('#stats-template').html()),
-
-    events: {
-    
-    },
-    
-    initialize: function() {
-      //this.input = this.$("#new-todo");
-
-      Photos.bind('add',   this.addOne, this);
-      Photos.bind('reset', this.addAll, this);
-      Photos.bind('all',   this.render, this);
-
-      Photos.fetch();
-    },
-
-    render: function() {
-      // this.$('#stats').html(this.statsTemplate({
-      //   collection: Photos.length,
-      //   storage: localStorage.length
-      // }));
-    },
-
-    addOne: function(photo) {
-      console.log('addOne: ' + JSON.stringify(photo));
-      //Photos.add(todo);
-      var view = new PhotoView({model: photo});
-      $("#photo-list").append(view.render().el);
-    },
-
-    addAll: function() {
-      // Photos.each(this.addOne);
+  fav: function() {
+    if (!this.model.toggleFav()) {
+      // hide item
     }
-  });
+  },
+
+  setFavIcon: function() {
+    
+  }
+});
+
+///////////////////////////////////////////////////////////////
+//  Photo List View
+///////////////////////////////////////////////////////////////
+var PhotoListView = Backbone.View.extend({
+  el: '#container',
+
+  initialize: function() {
+    _.bindAll(this, "render");
+    this.collection.bind("add", this.render);
+    this.collection.bind("remove", this.render);
+  },
+  
+  render: function() {
+    $(this.el).empty(); // Clear existing list in el.
+
+    var els = [];
+
+    this.collection.each(function(model) {
+      var view = new PhotoItemView({model: model});
+      els.push(view.render().el);
+    });
+
+    $(this.el).append(els);
+    //console.log(els);
+    return this;
+  }
+});
+
+///////////////////////////////////////////////////////////////
+//  Photo Most Viewed List View
+///////////////////////////////////////////////////////////////
+var MostViewedView = Backbone.View.extend({
+  el: '#container',
+
+  initialize: function() {
+    _.bindAll(this, "render");
+    this.collection.bind("add", this.render);
+    this.collection.bind("remove", this.render);
+  },
+  
+  render: function() {
+    $(this.el).empty(); // Clear existing list in el.
+
+    var els = [];
+
+    var sortedList = this.collection.sortBy(function(model) {
+      return model.get('view');
+    });
+
+    _.each(sortedList.reverse(), function(model) {
+      var view = new PhotoItemView({model: model});
+      els.push(view.render().el);
+    });
+
+    $(this.el).append(els);
+    //console.log(els);
+    return this;
+  }
+});
+
+///////////////////////////////////////////////////////////////
+//  Photo Favourite List View
+///////////////////////////////////////////////////////////////
+var FavouriteView = Backbone.View.extend({
+  el: '#container',
+
+  events: {
+    // "click a": "say"
+  },
+
+  initialize: function() {
+    _.bindAll(this, "render");
+    this.collection.bind("add", this.render);
+    this.collection.bind("remove", this.render);
+  },
+  
+  render: function() {
+    $(this.el).empty(); // Clear existing list in el.
+
+    var els = [];
+
+    var favList = this.collection.filter(function(model) {
+      return model.get('fav');
+    });
+
+    _.each(favList, function(model) {
+      var view = new PhotoItemView({model: model});
+      els.push(view.render().el);
+    });
+
+    $(this.el).append(els);
+    //console.log(els);
+    return this;
+  }
+});
+
+
+///////////////////////////////////////////////////////////////
+//  Router
+///////////////////////////////////////////////////////////////
+var PhotoList = Backbone.Router.extend({
+  initialize : function(){
+    gallery.fetch();
+
+    _.each(list, function(x) {
+      var exist = gallery.any(function (model) {
+        return model.get('src') == x.src;
+      });
+
+      if (!exist) {
+        console.log('Adding to collection: ' + x.src);
+        gallery.create(x);
+      }
+    });
+
+    photoListView = new PhotoListView({collection: gallery});
+    mostViewedView = new MostViewedView({collection: gallery});
+    favouriteView = new FavouriteView({collection: gallery});
+
+  },
+
+  routes : {
+    "" : "index",
+    "most" : "mostViewed",
+    "fav" : "favouriteView"
+  },
+
+  index : function(){
+    console.log('View: Index');
+    photoListView.render();
+    $('#container').masonry('reload');
+  },
+
+  mostViewed: function() {
+    console.log('View: Most Viewed');
+    mostViewedView.render();
+    $('#container').masonry('reload');
+  },
+
+  favouriteView: function() {
+    console.log('View: Favourite');
+    favouriteView.render();
+    $('#container').masonry('reload');
+  }
+});
+
+
 ///////////////////////////////////////////////////////////////
 //  Init
 ///////////////////////////////////////////////////////////////
-  //Photos.add(list);
-  _.each(list, function(x) {
-    //
-    // If Photo found already, dont create!
-    //
-    //Photos.create(x);
-  });
+var list = [
+  { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
+  { src: 'http://farm5.static.flickr.com/4131/5013039885_0d16ac87bc.jpg' },
+  { src: 'http://farm5.static.flickr.com/4086/5013039583_26717f6e89.jpg' },
+  { src: 'http://farm5.static.flickr.com/4146/5013646070_f1f44b1939.jpg' },
+  { src: 'http://farm5.static.flickr.com/4144/5013039541_17f2579e33.jpg' },
+  { src: 'http://farm5.static.flickr.com/4153/5013039741_d860fb640b.jpg' },
+  { src: 'http://farm5.static.flickr.com/4113/5013039697_a15e41fcd8.jpg' },
+  { src: 'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg' },
+  { src: 'http://farm5.static.flickr.com/4089/5013040075_bac12ff74e.jpg' },
+  { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
+  { src: 'http://farm5.static.flickr.com/4131/5013039885_0d16ac87bc.jpg' },
+  { src: 'http://farm5.static.flickr.com/4086/5013039583_26717f6e89.jpg' },
+  { src: 'http://farm5.static.flickr.com/4146/5013646070_f1f44b1939.jpg' },
+  { src: 'http://farm5.static.flickr.com/4144/5013039541_17f2579e33.jpg' },
+  { src: 'http://farm5.static.flickr.com/4153/5013039741_d860fb640b.jpg' },
+  { src: 'http://farm5.static.flickr.com/4113/5013039697_a15e41fcd8.jpg' },
+  { src: 'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg' },
+  { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
+  { src: 'http://farm5.static.flickr.com/4131/5013039885_0d16ac87bc.jpg' },
+  { src: 'http://farm5.static.flickr.com/4086/5013039583_26717f6e89.jpg' },
+  { src: 'http://farm5.static.flickr.com/4146/5013646070_f1f44b1939.jpg' },
+  { src: 'http://farm5.static.flickr.com/4144/5013039541_17f2579e33.jpg' },
+  { src: 'http://farm5.static.flickr.com/4153/5013039741_d860fb640b.jpg' },
+  { src: 'http://farm5.static.flickr.com/4113/5013039697_a15e41fcd8.jpg' },
+  { src: 'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg' }
+];
 
-  var App = new AppView;
-
-  console.log('Photos.length ' + Photos.length);
+$(function(){
+  var app = new PhotoList;
+  Backbone.history.start();
+  console.log('gallery.length ' + gallery.length);
   console.log('localStorage.length ' + localStorage.length);
 
 ///////////////////////////////////////////////////////////////
@@ -174,6 +274,7 @@ $(function(){
   var $container = $('#container');
 
   $(".box").hide();
+
   $(".box > a > img").hide()
   .one("ready", function() {
     console.log($(this).height());
@@ -190,17 +291,22 @@ $(function(){
     itemSelector : '.box',
     columnWidth: function( containerWidth ) {
       $('.col').css('width', (containerWidth / 5)-4);
-      $('div.col > img').css('width', (containerWidth / 5)-4);
+      $('div.col > a > img').css('width', (containerWidth / 5)-4);
+      $('.col2').css('width', (containerWidth / 5)*2-4);
+      $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
       return containerWidth / 5;
     }
   });
+
   $container.imagesLoaded( function(){
     $container.masonry({
       isAnimated: false,
       itemSelector : '.box',
       columnWidth: function( containerWidth ) {
         $('.col').css('width', (containerWidth / 5)-4);
-        $('div.col > img').css('width', (containerWidth / 5)-4);
+        $('div.col > a > img').css('width', (containerWidth / 5)-4);
+        $('.col2').css('width', (containerWidth / 5)*2-4);
+        $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
         return containerWidth / 5;
       }
     });

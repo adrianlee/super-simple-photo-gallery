@@ -69,6 +69,7 @@ body {
 
 
 .col { width: 180px; }
+.col2 { width: 360px; }
 /*
 .col img { max-width: 180px; max-height: auto;}
 */
@@ -96,3 +97,21 @@ body {
           transition-property: left, right, top;
 }
 */
+
+div.box div.imgmenu {
+  background-color: #333;
+  position: absolute;
+  right: 0;
+  float: right;
+  top: 0;
+  overflow: hidden;
+  text-align: center;
+  z-index: 2;
+  line-height: 30px;
+  letter-spacing: 5px;
+  padding: 0px 5px;
+}
+
+div.box div.imgmenu a {
+  padding: 0px 3px;
+}
