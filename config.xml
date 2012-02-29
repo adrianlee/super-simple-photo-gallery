@@ -20,4 +20,6 @@
 	<rim:permissions>
 		<rim:permit>access_shared</rim:permit>
 	</rim:permissions>
+	
+	<orientation mode="landscape"/>
 </widget>
