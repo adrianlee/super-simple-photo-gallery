@@ -52,7 +52,7 @@ var PhotoItemView = Backbone.View.extend({
   },
 
   events: {
-    "click a" : "open",
+    "click a.open" : "open",
     "click a.fav" : "fav" 
   },
 
@@ -63,12 +63,29 @@ var PhotoItemView = Backbone.View.extend({
   },
 
   open: function() {
+    // Minimize previously opened images
     if (tempPhotoItem) {
       tempPhotoItem.removeClass('col2').addClass('col');
+      tempPhotoItem.children(".imgmenu").hide()
     }
+
+    // Maximize image
+    // IF image height > width THEN append class col2
+    // IF image height < width THEN append class col3    
     tempPhotoItem = $(this.el);
     $(this.el).removeClass('col').addClass('col2');
+
+    // Show image menu
+    $(this.el).children(".imgmenu").show()
+
+    // Reload position
     $('#container').masonry('reload');
+
+    // Scoll image to top
+    var targetOffset = $(this.el).offset().top-42;
+    $('html,body').animate({scrollTop: targetOffset}, 1000);
+
+    // Increment view counter
     this.model.incrView();
   },
 
@@ -282,7 +299,9 @@ $(function(){
   })
   .one("load", function () {
     $(this).parent().parent().fadeIn();
-    $(this).fadeIn(); 
+    $(this).fadeIn();
+
+    // get dimensions and save into db
   });
   
 
