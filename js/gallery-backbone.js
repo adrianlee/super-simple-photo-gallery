@@ -86,7 +86,8 @@ var PhotoItemView = Backbone.View.extend({
     tempPhotoItem = $(this.el);
     
     // Show image menu
-    $(this.el).children(".imgmenu").show()
+    this.setFavIcon();
+    $(this.el).children('.imgmenu').show()
 
     // Reload position
     $('#container').masonry('reload');
@@ -101,12 +102,20 @@ var PhotoItemView = Backbone.View.extend({
 
   fav: function() {
     if (!this.model.toggleFav()) {
-      // hide item
+      // hide item if in favourites view
+      if (currentView == 'favourite'){
+        $(this.el).remove();
+      }
     }
+    this.setFavIcon();
   },
 
   setFavIcon: function() {
-    
+    if (this.model.get('fav')) {
+      $(this.el).children('.imgmenu').children('.fav').addClass('btn-success');
+    } else {
+      $(this.el).children('.imgmenu').children('.fav').removeClass('btn-success');
+    }
   }
 });
 
@@ -239,18 +248,21 @@ var PhotoList = Backbone.Router.extend({
 
   index : function(){
     console.log('View: Index');
+    currentView = 'index';
     photoListView.render();
     $('#container').masonry('reload');
   },
 
   mostViewed: function() {
     console.log('View: Most Viewed');
+    currentView = 'mostViewed';
     mostViewedView.render();
     $('#container').masonry('reload');
   },
 
   favouriteView: function() {
     console.log('View: Favourite');
+    currentView = 'favourite';
     favouriteView.render();
     $('#container').masonry('reload');
   }
@@ -260,6 +272,8 @@ var PhotoList = Backbone.Router.extend({
 ///////////////////////////////////////////////////////////////
 //  Init
 ///////////////////////////////////////////////////////////////
+var currentView;
+
 var list = [
   { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
   { src: 'http://farm5.static.flickr.com/4131/5013039885_0d16ac87bc.jpg' },
