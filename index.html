@@ -24,8 +24,8 @@
         <div class="nav-collapse">
           <ul class="nav">
             <li><a href="#">Recent</a></li>
-            <li><a href="#">Most Viewed</a></li>
-            <li><a href="#">Favourite</a></li>
+            <li><a href="#most">Most Viewed</a></li>
+            <li><a href="#fav">Favourite</a></li>
           </ul>
           <ul class="nav pull-right">
             <li class="divider-vertical"></li>
@@ -43,10 +43,8 @@
   </div>
 
   <!-- Stage -->
-  <div id="stats" class="clearfix"></div>
-  <div id="container" class="clearfix">
-    <ul id="photo-list"></ul>
-  </div>
+  <div id="container" class="clearfix"></div>
+  <div id="footer" class="clearfix"></div>
 
   <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
   <script type="text/javascript" src="js/jquery.masonry.min.js"></script>
@@ -54,19 +52,18 @@
   <script type="text/javascript" src="js/backbone-min.js"></script>
   <script type="text/javascript" src="js/backbone-localStorage.js"></script>
   
-  
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
-  <script type="text/javascript" src="js/retrieve_images.js">.js></script>
+  <script type="text/javascript" src="js/retrieve_images.js"></script>
 
   <!-- <script type="text/javascript" src="js/gallery.js"></script> -->
   <script type="text/javascript" src="js/gallery-backbone.js"></script>
 
   <script type="text/template" id="photo-template">
-    <div class="box col">
-      <a class="open" href="#">
-        <img src="<%= src %>"/>
-      </a>
-    </div>
+      <a class="open <%= id %>"><img src="<%= src %>"/></a>
+      <div class="imgmenu">
+        <a class="fav"><i class="icon-star-empty icon-white"></i></a>
+        <a class="fav"><i class="icon-trash icon-white"></i></a>
+      </div>
   </script>
 
   <script type="text/template" id="stats-template">
