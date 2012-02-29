@@ -65,16 +65,26 @@ var PhotoItemView = Backbone.View.extend({
   open: function() {
     // Minimize previously opened images
     if (tempPhotoItem) {
-      tempPhotoItem.removeClass('col2').addClass('col');
+      if (tempPhotoItem.hasClass('col2')) {
+        tempPhotoItem.removeClass('col2').addClass('col');
+      }
+      if (tempPhotoItem.hasClass('col3')) {
+        tempPhotoItem.removeClass('col3').addClass('col');
+      }
       tempPhotoItem.children(".imgmenu").hide()
     }
 
     // Maximize image
-    // IF image height > width THEN append class col2
-    // IF image height < width THEN append class col3    
+    if (this.model.get('width')/this.model.get('height') <= 1.33) {
+      // IF image height > width THEN append class col2
+      $(this.el).removeClass('col').addClass('col2');
+    } else {
+      // IF image height < width THEN append class col3
+      $(this.el).removeClass('col').addClass('col3');
+    }
+    
     tempPhotoItem = $(this.el);
-    $(this.el).removeClass('col').addClass('col2');
-
+    
     // Show image menu
     $(this.el).children(".imgmenu").show()
 
@@ -83,7 +93,7 @@ var PhotoItemView = Backbone.View.extend({
 
     // Scoll image to top
     var targetOffset = $(this.el).offset().top-42;
-    $('html,body').animate({scrollTop: targetOffset}, 1000);
+    $('html,body').animate({scrollTop: targetOffset}, 300);
 
     // Increment view counter
     this.model.incrView();
@@ -288,20 +298,25 @@ $(function(){
 //  Masonry
 ///////////////////////////////////////////////////////////////
 
-  var $container = $('#container');
+  var $container = $('#container'),
+      something;
 
   $(".box").hide();
 
   $(".box > a > img").hide()
-  .one("ready", function() {
-    console.log($(this).height());
-    $(this).parent().parent().css('height', $(this).height());
-  })
+  // .one("ready", function() {
+  //   console.log($(this).height());
+  //   $(this).parent().parent().css('height', $(this).height());
+  // })
   .one("load", function () {
     $(this).parent().parent().fadeIn();
     $(this).fadeIn();
 
-    // get dimensions and save into db
+    // get image dimensions and save into db
+    var image = gallery.get($(this).parent().children('.id').text());
+    image.set('width', $(this).width());
+    image.set('height', $(this).height());
+    image.save();
   });
   
 
@@ -313,6 +328,8 @@ $(function(){
       $('div.col > a > img').css('width', (containerWidth / 5)-4);
       $('.col2').css('width', (containerWidth / 5)*2-4);
       $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
+      $('.col3').css('width', (containerWidth / 5)*3-4);
+      $('div.col3 > a > img').css('width', (containerWidth / 5)*3-4);
       return containerWidth / 5;
     }
   });
@@ -326,6 +343,8 @@ $(function(){
         $('div.col > a > img').css('width', (containerWidth / 5)-4);
         $('.col2').css('width', (containerWidth / 5)*2-4);
         $('div.col2 > a > img').css('width', (containerWidth / 5)*2-4);
+        $('.col3').css('width', (containerWidth / 5)*3-4);
+        $('div.col3 > a > img').css('width', (containerWidth / 5)*3-4);
         return containerWidth / 5;
       }
     });
