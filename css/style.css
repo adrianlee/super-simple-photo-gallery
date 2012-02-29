@@ -99,19 +99,28 @@ body {
 */
 
 div.box div.imgmenu {
-  background-color: #333;
   position: absolute;
-  right: 0;
-  float: right;
-  top: 0;
-  overflow: hidden;
-  text-align: center;
+  top: 10px;
+  left: 10px;
   z-index: 2;
-  line-height: 30px;
-  letter-spacing: 5px;
-  padding: 0px 5px;
+  overflow: hidden;
 }
 
-div.box div.imgmenu a {
-  padding: 0px 3px;
+/*
+div.box div.imgmenu a span {
+  width: 33%;
+  z-index: 3;
+  overflow: hidden;
+  text-align: center;
 }
+
+div.box div.imgmenu a span:hover {
+  background: #444;
+  z-index: 3;
+  overflow: hidden;
+}
+
+div.box div.imgmenu a span i {
+  z-index: 4;
+  overflow: hidden;
+}*/
