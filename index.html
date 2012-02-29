@@ -25,9 +25,11 @@
           <ul class="nav">
             <li><a href="#">Recent</a></li>
             <li><a href="#most">Most Viewed</a></li>
-            <li><a href="#fav">Favourite</a></li>
+            <li><a href="#fav">Favourite</a></li>            
           </ul>
           <ul class="nav pull-right">
+            <li class="divider-vertical"></li>
+            <li><a onclick="location.reload();"><i class="icon-refresh icon-white"></i> Refresh</a></li>
             <li class="divider-vertical"></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>
@@ -70,20 +72,7 @@
         <a class="btn btn-large trash"><i class="icon-trash"></i> Trash</a>
     </div>
   </script>
-
-  <script type="text/template" id="most-viewed-photo-template">
-    <a class="open">
-      <img src="<%= src %>"/>
-      <span class="id hide"><%= id %></span>
-    </a>
-    <div class="imgmenu hide">
-        <a class="btn btn-large active"><%= view %> Views</a>
-        <a class="btn btn-large fav"><i class="icon-star"></i> Favourite</a>
-        <a class="btn btn-large hideimg"><i class="icon-eye-open"></i> Hide</a>
-        <a class="btn btn-large trash"><i class="icon-trash"></i> Trash</a>
-    </div>
-  </script>
-
+  
   <script type="text/template" id="stats-template">
     <span class="collection"><%= collection %></span>
     <span class="storage"><%= storage %></span>
