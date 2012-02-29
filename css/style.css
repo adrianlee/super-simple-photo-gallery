@@ -125,3 +125,8 @@ div.box div.imgmenu a span i {
   z-index: 4;
   overflow: hidden;
 }*/
+
+
+.hidden {
+  opacity:0.2;
+}

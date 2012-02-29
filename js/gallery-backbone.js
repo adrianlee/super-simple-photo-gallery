@@ -5,7 +5,8 @@ var Photo = Backbone.Model.extend({
   defaults: {
     src: 'http://placekitten.com/200/300',
     view: 0,
-    fav: false
+    fav: false,
+    hidden: false
   },
 
   toggleFav: function() {
@@ -14,6 +15,15 @@ var Photo = Backbone.Model.extend({
     console.log(this.get('fav'));
     this.save();
     return this.get('fav');
+  },
+
+
+  toggleHidden: function() {
+    var toggle = !this.get('hidden');
+    this.set('hidden', toggle);
+    console.log(this.get('hidden'));
+    this.save();
+    return this.get('hidden');
   },
 
   incrView: function() {
@@ -48,17 +58,27 @@ var PhotoItemView = Backbone.View.extend({
   initialize: function () {
     this.template = _.template($('#photo-template').html());
     _.bindAll(this, "render");
-    // this.model.bind("change:fav", this.toggleFav);
   },
 
   events: {
     "click a.open" : "open",
-    "click a.fav" : "fav" 
+    "click a.fav" : "fav",
+    "click a.hideimg" : "hidden" 
   },
 
   render: function() {
     var content = this.template(this.model.toJSON());
     $(this.el).html(content);
+
+    if (this.model.get('hidden')) {
+      $(this.el).addClass('hidden');
+      if (viewHidden) { 
+        $(this.el).hide();
+      }
+    } else {
+      $(this.el).removeClass('hidden');
+    }
+
     return this;
   },
 
@@ -87,6 +107,7 @@ var PhotoItemView = Backbone.View.extend({
     
     // Show image menu
     this.setFavIcon();
+    this.setHiddenImage();
     $(this.el).children('.imgmenu').show()
 
     // Reload position
@@ -110,11 +131,30 @@ var PhotoItemView = Backbone.View.extend({
     this.setFavIcon();
   },
 
+
+  hidden: function() {
+    if (this.model.toggleHidden()) {
+      $(this.el).addClass('hidden');
+    } else {
+      $(this.el).removeClass('hidden');
+    }
+    this.setHiddenImage();
+  },
+
   setFavIcon: function() {
     if (this.model.get('fav')) {
       $(this.el).children('.imgmenu').children('.fav').addClass('btn-success');
     } else {
       $(this.el).children('.imgmenu').children('.fav').removeClass('btn-success');
+    }
+  },
+
+
+  setHiddenImage: function() {
+    if (this.model.get('hidden')) {
+      $(this.el).children('.imgmenu').children('.hideimg').addClass('btn-info');
+    } else {
+      $(this.el).children('.imgmenu').children('.hideimg').removeClass('btn-info');
     }
   }
 });
@@ -127,8 +167,6 @@ var PhotoListView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, "render");
-    this.collection.bind("add", this.render);
-    this.collection.bind("remove", this.render);
   },
   
   render: function() {
@@ -272,7 +310,13 @@ var PhotoList = Backbone.Router.extend({
 ///////////////////////////////////////////////////////////////
 //  Init
 ///////////////////////////////////////////////////////////////
-var currentView;
+var currentView,
+    viewHidden = false;
+
+function toggleViewHidden() {
+  viewHidden = !viewHidden;
+  console.log(viewHidden);
+}
 
 var list = [
   { src: 'http://farm5.static.flickr.com/4113/5013039951_3a47ccd509.jpg' },
@@ -323,14 +367,21 @@ $(function(){
   //   $(this).parent().parent().css('height', $(this).height());
   // })
   .one("load", function () {
-    $(this).parent().parent().fadeIn();
-    $(this).fadeIn();
-
     // get image dimensions and save into db
     var image = gallery.get($(this).parent().children('.id').text());
     image.set('width', $(this).width());
     image.set('height', $(this).height());
     image.save();
+    
+    if (image.get('hidden')) {
+      if (viewHidden) {
+        $(this).parent().parent().fadeIn();
+        $(this).fadeIn();
+      }
+    } else {
+      $(this).parent().parent().fadeIn();
+      $(this).fadeIn();
+    }
   });
   
 
