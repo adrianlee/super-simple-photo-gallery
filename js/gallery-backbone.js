@@ -65,7 +65,6 @@ var PhotoItemView = Backbone.View.extend({
   opened: false,
 
   open: function() {
-    console.log($(this.el));
     if (this.opened) {
       this.opened = false;
       if ($(this.el).hasClass('col2')) {
@@ -112,8 +111,8 @@ var PhotoItemView = Backbone.View.extend({
       $('html,body').animate({scrollTop: targetOffset}, 300);
 
       // Increment view counter
-      $(this.el).children('.imgmenu').children('.view').text(this.model.get('view') + ' Views');
       this.model.incrView();
+      $(this.el).children('.imgmenu').children('.view').text(this.model.get('view') + ' Views');
     }
   },
 
