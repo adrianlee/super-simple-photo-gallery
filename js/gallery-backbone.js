@@ -245,7 +245,7 @@ var PhotoList = Backbone.Router.extend({
 
       if (!exist) {
         console.log('Adding to collection: ' + x.src);
-        gallery.create(x);
+        gallery.create({ 'src': x });
       }
     });
 
