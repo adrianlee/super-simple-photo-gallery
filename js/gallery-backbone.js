@@ -62,33 +62,21 @@ var PhotoItemView = Backbone.View.extend({
     return this;
   },
 
-  opened: false,
-
   open: function() {
-    if (this.opened) {
-      this.opened = false;
-      if ($(this.el).hasClass('col2')) {
-        $(this.el).removeClass('col2').addClass('col');
-      }
-      if ($(this.el).hasClass('col3')) {
-        $(this.el).removeClass('col3').addClass('col');
-      }
-      $(this.el).children(".imgmenu").hide()
+
+    if ($(this.el).hasClass('opened')) {
+      $(this.el).removeClass('opened');
+      this.minimize($(this.el));
       $('#container').masonry('reload');
     } else {
       // Minimize previously opened images
       if (tempPhotoItem) {
-        if (tempPhotoItem.hasClass('col2')) {
-          tempPhotoItem.removeClass('col2').addClass('col');
-        }
-        if (tempPhotoItem.hasClass('col3')) {
-          tempPhotoItem.removeClass('col3').addClass('col');
-        }
-        tempPhotoItem.children(".imgmenu").hide()
+        tempPhotoItem.removeClass('opened')
+        this.minimize(tempPhotoItem);
       }
 
       // Maximize image
-      this.opened = true;
+      $(this.el).addClass('opened');
       if (this.model.get('width')/this.model.get('height') <= 1.33) {
         // IF image height > width THEN append class col2
         $(this.el).removeClass('col').addClass('col2');
@@ -114,6 +102,17 @@ var PhotoItemView = Backbone.View.extend({
       this.model.incrView();
       $(this.el).children('.imgmenu').children('.view').text(this.model.get('view') + ' Views');
     }
+  },
+
+  minimize: function(el){
+    el.opened = false;
+    if (el.hasClass('col2')) {
+      el.removeClass('col2').addClass('col');
+    }
+    if (el.hasClass('col3')) {
+      el.removeClass('col3').addClass('col');
+    }
+    el.children(".imgmenu").hide()
   },
 
   fav: function() {
