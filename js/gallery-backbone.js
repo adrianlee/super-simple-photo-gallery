@@ -240,7 +240,7 @@ var PhotoList = Backbone.Router.extend({
 
     _.each(imageDirList, function(x) {
       var exist = gallery.any(function (model) {
-        return model.get('src') == x.src;
+        return model.get('src') == x;
       });
 
       if (!exist) {
