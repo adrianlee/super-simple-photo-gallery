@@ -62,42 +62,58 @@ var PhotoItemView = Backbone.View.extend({
     return this;
   },
 
+  opened: false,
+
   open: function() {
-    // Minimize previously opened images
-    if (tempPhotoItem) {
-      if (tempPhotoItem.hasClass('col2')) {
-        tempPhotoItem.removeClass('col2').addClass('col');
+    console.log($(this.el));
+    if (this.opened) {
+      this.opened = false;
+      if ($(this.el).hasClass('col2')) {
+        $(this.el).removeClass('col2').addClass('col');
       }
-      if (tempPhotoItem.hasClass('col3')) {
-        tempPhotoItem.removeClass('col3').addClass('col');
+      if ($(this.el).hasClass('col3')) {
+        $(this.el).removeClass('col3').addClass('col');
       }
-      tempPhotoItem.children(".imgmenu").hide()
-    }
-
-    // Maximize image
-    if (this.model.get('width')/this.model.get('height') <= 1.33) {
-      // IF image height > width THEN append class col2
-      $(this.el).removeClass('col').addClass('col2');
+      $(this.el).children(".imgmenu").hide()
+      $('#container').masonry('reload');
     } else {
-      // IF image height < width THEN append class col3
-      $(this.el).removeClass('col').addClass('col3');
+      // Minimize previously opened images
+      if (tempPhotoItem) {
+        if (tempPhotoItem.hasClass('col2')) {
+          tempPhotoItem.removeClass('col2').addClass('col');
+        }
+        if (tempPhotoItem.hasClass('col3')) {
+          tempPhotoItem.removeClass('col3').addClass('col');
+        }
+        tempPhotoItem.children(".imgmenu").hide()
+      }
+
+      // Maximize image
+      this.opened = true;
+      if (this.model.get('width')/this.model.get('height') <= 1.33) {
+        // IF image height > width THEN append class col2
+        $(this.el).removeClass('col').addClass('col2');
+      } else {
+        // IF image height < width THEN append class col3
+        $(this.el).removeClass('col').addClass('col3');
+      }
+      
+      tempPhotoItem = $(this.el);
+      
+      // Show image menu
+      this.setFavIcon();
+      $(this.el).children('.imgmenu').show()
+
+      // Reload position
+      $('#container').masonry('reload');
+
+      // Scoll image to top
+      var targetOffset = $(this.el).offset().top-42;
+      $('html,body').animate({scrollTop: targetOffset}, 300);
+
+      // Increment view counter
+      this.model.incrView();
     }
-    
-    tempPhotoItem = $(this.el);
-    
-    // Show image menu
-    this.setFavIcon();
-    $(this.el).children('.imgmenu').show()
-
-    // Reload position
-    $('#container').masonry('reload');
-
-    // Scoll image to top
-    var targetOffset = $(this.el).offset().top-42;
-    $('html,body').animate({scrollTop: targetOffset}, 300);
-
-    // Increment view counter
-    this.model.incrView();
   },
 
   fav: function() {
