@@ -112,6 +112,7 @@ var PhotoItemView = Backbone.View.extend({
       $('html,body').animate({scrollTop: targetOffset}, 300);
 
       // Increment view counter
+      $(this.el).children('.imgmenu').children('.view').text(this.model.get('view') + ' Views');
       this.model.incrView();
     }
   },
