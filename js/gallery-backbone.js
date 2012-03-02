@@ -238,14 +238,14 @@ var PhotoList = Backbone.Router.extend({
   initialize : function(){
     gallery.fetch();
 
-    _.each(list, function(x) {
+    _.each(imageDirList, function(x) {
       var exist = gallery.any(function (model) {
-        return model.get('src') == x.src;
+        return model.get('src') == x;
       });
 
       if (!exist) {
         console.log('Adding to collection: ' + x.src);
-        gallery.create(x);
+        gallery.create({ 'src': x });
       }
     });
 
@@ -316,6 +316,8 @@ var list = [
   { src: 'http://farm5.static.flickr.com/4113/5013039697_a15e41fcd8.jpg' },
   { src: 'http://farm5.static.flickr.com/4124/5013646314_c7eaf84918.jpg' }
 ];
+
+getAllDirectories();
 
 $(function(){
   var app = new PhotoList;
