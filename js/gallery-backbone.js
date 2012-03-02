@@ -346,6 +346,10 @@ $(function(){
     image.set('width', $(this).width());
     image.set('height', $(this).height());
     image.save();
+  })
+  .one("error", function() {
+    var image = gallery.get($(this).parent().children('.id').text());
+    image.destroy();
   });
   
 
