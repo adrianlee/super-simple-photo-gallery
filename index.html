@@ -6,6 +6,8 @@
   <title>Super Simple Photo Gallery</title>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
   <link rel="stylesheet" type="text/css" href="css/style.css" />
+  <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="js/jquery.masonry.min.js"></script>
   <!--[if IE]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
@@ -21,7 +23,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-        <a class="brand" href=""><img src="img/icon.png" width="15px" height="15px" /> Spectator</a>
+        <a class="brand" href="">Spectator Image Gallery</a>
         <div class="nav-collapse">
           <ul class="nav">
             <li class="divider-vertical"></li>
@@ -36,7 +38,7 @@
             <li class="divider-vertical"></li>
             <li><a onclick="location.reload();"><i class="icon-refresh icon-white"></i> Refresh</a></li>
             <li class="divider-vertical"></li>
-            <li><a href="#about"><i class="icon-info-sign icon-white"></i> About</a></li>
+            <li><a data-toggle="modal" href="#myModal"><i class="icon-info-sign icon-white"></i> About</a></li>
           </ul>
         </div>
       </div>
@@ -44,16 +46,53 @@
   </div>
 
   <!-- Stage -->
-  <div id="container" class="clearfix"></div>
-  <div id="footer" class="clearfix"></div>
+  <div id="container" class="clearfix">
+    <div id="loading" class="progress progress-striped active" style="margin: 180px 200px; z-index: 1000;">
+      <div class="bar" style="width: 100%;"></div>
+    </div>
+  </div>
 
-  <script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
-  <script type="text/javascript" src="js/jquery.masonry.min.js"></script>
+  <div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <strong>About Spectator Image Gallery</strong>
+  </div>
+  <div class="modal-body">
+    <p>A beautiful and easy-to-use image gallery for showcasing your images in a dynamic fashion on a BlackBerry Playbook!</p>
+    <br/>
+    <br/>
+    <p>Spectator is <a onclick="openBrowser('https://github.com/adrianlee/Super-Simple-Photo-Gallery')">Open Source</a> and <a onclick="openBrowser('https://github.com/adrianlee/Super-Simple-Photo-Gallery/issues')">Under Development</a>.</p>
+
+    <br/>
+    <br/>
+    <h3>Features:</h3>
+    <ul>
+      <li> - Quick image viewing</li>
+      <li> - Dynamic layout</li>
+      <li> - Individual image menus</li>
+      <li> - Categories: Recent, Most Viewed, Favourites</li>
+    </ul>
+    <br/>
+    <br/>
+    <h3>Features To Come (v1.1):</h3>
+    <ul>
+      <li> - Image lazy-load & Infinite scroll</li>
+      <li> - Share images via Facebook/Twitter/Email</li>
+      <li> - Hide & Delete images via Spectator</li>
+    </ul>
+    <br/>
+    <br/>
+    <p>Collaborators: <a onclick="openBrowser('https://github.com/adrianlee/')">Adrian Lee</a> & <a onclick="openBrowser('https://github.com/choiboi')">James Choi</a></p>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-success" data-dismiss="modal">Close</a>
+  </div>
+
   <script type="text/javascript" src="js/underscore-min.js"></script>
   <script type="text/javascript" src="js/backbone-min.js"></script>
   <script type="text/javascript" src="js/backbone-localStorage.js"></script>
   
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- <script type="text/javascript" src="js/bootstrap-modal.js"></script> -->
   <script type="text/javascript" src="js/retrieve_images.js"></script>
 
   <!-- <script type="text/javascript" src="js/gallery.js"></script> -->
@@ -66,7 +105,7 @@
     </a>
     <div class="imgmenu hide">
         <a class="btn btn-large fav"><i class="icon-star"></i> Favourite</a>
-        <a class="btn btn-large hideimg"><i class="icon-eye-open"></i> Hide</a>
+        <a class="btn btn-large hideimg" onclick="alert('Look forward to Spectator v1.1');"><i class="icon-eye-open"></i> Hide</a>
         <!--<a class="btn btn-large trash"><i class="icon-trash"></i> Trash</a>-->
         <a class="btn btn-large view active"><%= view %> Views</a>
     </div>
@@ -76,5 +115,14 @@
     <span class="collection"><%= collection %></span>
     <span class="storage"><%= storage %></span>
   </script>
+
+  <script type="text/template" id="about-template">
+    <div class="hero-unit">
+      <h1>Spectator Image Gallery</h1>
+      
+      <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+    </div>
+  </script>
+</div>
 </body>
 </html>

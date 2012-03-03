@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <widget xmlns="http://www.w3.org/ns/widgets"
         xmlns:rim="http://www.blackberry.com/ns/widgets"
-        version="0.0.1.1"
+        version="1.0.0.25"
         rim:header="RIM-Widget: rim/widget">
-	<author href="https://github.com/adrianlee">Adrian Lee, James Choi</author>
+	<publisher>Lemonsweat</publisher>
+	<author>Lemonsweat</author>
 	<name>Photo Gallery</name>
 	<description>
 		Photo Gallery.
@@ -15,6 +16,8 @@
 	<rim:category name="media" />
 
 	<feature id="blackberry.io.dir" />
+	<feature id="blackberry.invoke"/>
+	<feature id="blackberry.invoke.BrowserArguments"/>
 
 	<access uri="*" />
 	<rim:permissions>
