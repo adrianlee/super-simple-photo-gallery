@@ -142,8 +142,6 @@ var PhotoListView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, "render");
-    this.collection.bind("add", this.render);
-    this.collection.bind("remove", this.render);
   },
   
   render: function() {
@@ -170,8 +168,6 @@ var MostViewedView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, "render");
-    this.collection.bind("add", this.render);
-    this.collection.bind("remove", this.render);
   },
   
   render: function() {
@@ -190,6 +186,9 @@ var MostViewedView = Backbone.View.extend({
 
     $(this.el).append(els);
     //console.log(els);
+
+    $('#container').masonry('reload');
+
     return this;
   }
 });
@@ -206,8 +205,6 @@ var FavouriteView = Backbone.View.extend({
 
   initialize: function() {
     _.bindAll(this, "render");
-    this.collection.bind("add", this.render);
-    this.collection.bind("remove", this.render);
   },
   
   render: function() {
@@ -263,6 +260,7 @@ var PhotoList = Backbone.Router.extend({
 
   index : function(){
     console.log('View: Index');
+    $('html,body').animate({scrollTop: 0}, 300);
     currentView = 'index';
     photoListView.render();
     $('#container').masonry('reload');
@@ -270,6 +268,7 @@ var PhotoList = Backbone.Router.extend({
 
   mostViewed: function() {
     console.log('View: Most Viewed');
+    $('html,body').animate({scrollTop: 0}, 300);
     currentView = 'mostViewed';
     mostViewedView.render();
     $('#container').masonry('reload');
@@ -277,6 +276,7 @@ var PhotoList = Backbone.Router.extend({
 
   favouriteView: function() {
     console.log('View: Favourite');
+    $('html,body').animate({scrollTop: 0}, 300);
     currentView = 'favourite';
     favouriteView.render();
     $('#container').masonry('reload');
