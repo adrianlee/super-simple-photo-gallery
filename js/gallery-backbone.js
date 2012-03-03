@@ -383,3 +383,8 @@ $(function(){
   });
 
 });
+
+function openBrowser(link) {
+  var args = new blackberry.invoke.BrowserArguments(link);
+  blackberry.invoke.invoke(blackberry.invoke.APP_BROWSER, args);
+}

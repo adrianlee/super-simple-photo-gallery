@@ -16,6 +16,8 @@
 	<rim:category name="media" />
 
 	<feature id="blackberry.io.dir" />
+	<feature id="blackberry.invoke"/>
+	<feature id="blackberry.invoke.BrowserArguments"/>
 
 	<access uri="*" />
 	<rim:permissions>

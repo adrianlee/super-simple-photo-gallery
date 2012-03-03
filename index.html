@@ -38,7 +38,7 @@
             <li class="divider-vertical"></li>
             <li><a onclick="location.reload();"><i class="icon-refresh icon-white"></i> Refresh</a></li>
             <li class="divider-vertical"></li>
-            <li><a href="#about"><i class="icon-info-sign icon-white"></i> About</a></li>
+            <li><a data-toggle="modal" href="#myModal"><i class="icon-info-sign icon-white"></i> About</a></li>
           </ul>
         </div>
       </div>
@@ -52,11 +52,47 @@
     </div>
   </div>
 
+  <div class="modal hide" id="myModal">
+  <div class="modal-header">
+    <strong>About Spectator Image Gallery</strong>
+  </div>
+  <div class="modal-body">
+    <p>A beautiful and easy-to-use image gallery for showcasing your images in a dynamic fashion on a BlackBerry Playbook!</p>
+    <br/>
+    <br/>
+    <p>Spectator is <a onclick="openBrowser('https://github.com/adrianlee/Super-Simple-Photo-Gallery')">Open Source</a> and <a onclick="openBrowser('https://github.com/adrianlee/Super-Simple-Photo-Gallery/issues')">Under Development</a>.</p>
+
+    <br/>
+    <br/>
+    <h3>Features:</h3>
+    <ul>
+      <li> - Quick image viewing</li>
+      <li> - Dynamic layout</li>
+      <li> - Individual image menus</li>
+      <li> - Categories: Recent, Most Viewed, Favourites</li>
+    </ul>
+    <br/>
+    <br/>
+    <h3>Features To Come (v1.1):</h3>
+    <ul>
+      <li> - Image lazy-load & Infinite scroll</li>
+      <li> - Share images via Facebook/Twitter/Email</li>
+      <li> - Hide & Delete images via Spectator</li>
+    </ul>
+    <br/>
+    <br/>
+    <p>Collaborators: <a onclick="openBrowser('https://github.com/adrianlee/')">Adrian Lee</a> & <a onclick="openBrowser('https://github.com/choiboi')">James Choi</a></p>
+  </div>
+  <div class="modal-footer">
+    <a class="btn btn-success" data-dismiss="modal">Close</a>
+  </div>
+
   <script type="text/javascript" src="js/underscore-min.js"></script>
   <script type="text/javascript" src="js/backbone-min.js"></script>
   <script type="text/javascript" src="js/backbone-localStorage.js"></script>
   
   <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- <script type="text/javascript" src="js/bootstrap-modal.js"></script> -->
   <script type="text/javascript" src="js/retrieve_images.js"></script>
 
   <!-- <script type="text/javascript" src="js/gallery.js"></script> -->
@@ -83,22 +119,10 @@
   <script type="text/template" id="about-template">
     <div class="hero-unit">
       <h1>Spectator Image Gallery</h1>
-      <p>A beautiful and easy-to-use image gallery for showcasing your images on a BlackBerry Playbook!</p>
-      <h3>Features</h3>
-      <ul>
-        <li>Quick image viewing</li>
-        <li>A dynamic layout</li>
-        <li>Individual image menus</li>
-        <li>Categories: Recent, Most Viewed, Favourites</li>
-      </ul>
-      <h3>Features To Come</h3>
-      <ul>
-        <li>Share Photos via Facebook/Twitter/Email
-        <li>Hide Photos from Gallery</li>
-        <li>Delete Photos from Gallery</li>
-      </ul>
+      
       <p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
     </div>
   </script>
+</div>
 </body>
 </html>
