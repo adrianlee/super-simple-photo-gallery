@@ -5,6 +5,8 @@ A beautiful and easy-to-use image gallery for showcasing your images on a BlackB
 
 Built with [BlackBerry WebWorks](https://bdsc.webapps.blackberry.com/html5/) for Tablet OS
 
+![App Screenshot](https://github.com/adrianlee/Super-Simple-Photo-Gallery/raw/master/screenshot.jpg)
+
 ### Features
 
 * [JQuery Masonry Plugin](http://masonry.desandro.com)
